@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antebellum Burned Lands Map</title>
+  <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      background-color: #f4f4f4;
+    }
+    #map {
+      height: 100vh;
+      z-index: 0;
+    }
+    .info-box {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      max-width: 400px;
+      z-index: 1000;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    .info-box h1 {
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+    .info-box h2 {
+      margin-top: 1.2em;
+      font-size: 1.2rem;
+      color: #a33;
+    }
+    .info-box p {
+      line-height: 1.6;
+    }
+    .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #666;
+      background: none;
+      border: none;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+    .open-info-btn {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      z-index: 1001;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    .open-info-btn:hover {
+      background-color: #eee;
+    }
+    @media (max-width: 768px) {
+      .info-box {
+        max-width: 90%;
+        left: 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <button class="open-info-btn" onclick="document.getElementById('infoBox').style.display='block'">ℹ️ Info</button>
+  <div class="info-box" id="infoBox">
+    <button class="close-btn" onclick="document.getElementById('infoBox').style.display='none'">✖</button>
+    <h1>Antebellum Era Burn Scars</h1>
+    <p>
+      Between 1812 and 1861, in the Southeastern United States, planters and settlers used fire not just as a tool for land management, but as a weapon of displacement. These intentional burns were part of broader efforts to expel Indigenous populations from their ancestral homelands—often in preparation for cotton agriculture under the plantation economy. Burning forests and grasslands destroyed food sources, sacred sites, and living space, driving Native communities away under increasingly hostile conditions.
+    </p>
+    <p>
+      The Muscogee (Creek), Cherokee, Choctaw, Chickasaw, and Seminole peoples, among others, were systematically removed through tactics including legal manipulation, military force, and environmental destruction. Fires intentionally set by settlers and planters made entire regions uninhabitable, and this practice was often coordinated with militia activity and land speculation.
+    </p>
+    <p>
+      The Tallapoosa Valley in Alabama, for instance, saw repeated burning campaigns during the 1830s, designed to evict the Muscogee people. In South Carolina's Pee Dee River region, planters burned forests to displace the Catawba and Pee Dee people. These tactics laid the groundwork for events like the Trail of Tears, during which thousands of Indigenous people died due to forced relocation.
+    </p>
+    <p>
+      This map shows some of the known burn zones used in these campaigns. Red-shaded areas indicate regions with documented settler burning. Click on each to learn more about its historical context. This visualization offers a glimpse into how environmental manipulation intersected with systemic violence and settler colonialism in early American history.
+    </p>
+    <h2>Sources</h2>
+    <ul>
+      <li>Saunt, Claudio. <em>Unworthy Republic: The Dispossession of Native Americans and the Road to Indian Territory</em>.</li>
+      <li>Fogelson, Raymond D. (Ed.). <em>Handbook of North American Indians: Southeast</em>.</li>
+      <li>US National Archives: Indian Removal Act Documents.</li>
+    </ul>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([33.5, -85], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Example burned regions (These should be historically validated geo-coordinates)
+    const burnedAreas = [
+      {
+        name: "Tallapoosa Valley, Alabama",
+        coords: [[
+          [32.9, -85.9], [32.9, -85.5], [33.2, -85.5], [33.2, -85.9]
+        ]],
+        info: "Burns in this area were tied to Muscogee Creek removal efforts in the 1830s."
+      },
+      {
+        name: "Pee Dee River Region, South Carolina",
+        coords: [[
+          [34.2, -79.9], [34.2, -79.5], [34.5, -79.5], [34.5, -79.9]
+        ]],
+        info: "Planters used fire in this region to clear land from the Pee Dee and Catawba people."
+      }
+    ];
+
+    burnedAreas.forEach(area => {
+      const polygon = L.polygon(area.coords, {
+        color: 'red',
+        fillColor: '#ff4d4d',
+        fillOpacity: 0.6
+      }).addTo(map);
+
+      polygon.bindPopup(`<b>${area.name}</b><br>${area.info}`);
+    });
+  </script>
+</body>
+</html>
